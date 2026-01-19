@@ -1,0 +1,26 @@
+# Build
+/build/
+cmake-build-*/
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+
+# Ejecutables
+*.out
+*.exe
+
+# Objetos
+*.o
+*.obj
+
+# Archivos temporales
+*.log
+
+# IDE
+.vscode/
+
+# Sistema
+.DS_Store
