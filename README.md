@@ -1,12 +1,12 @@
-# Proyecto Final POO - Hell Kitchen
+# 🧩 Proyecto Final POO - Sokoban
 
 Juego desarrollado en C++ utilizando la libreria SFML como proyecto para la materia Programación Orientada a Objetos.
 
-El objetivo del juego es mover al jugador de izquierda a derecha para atrapar comida y evitar todo lo demás.
+El objetivo del juego es resolver puzzles empujando cajas hacia puntos específicos para progresar de nivel.
 
 ---
 
-## Tecnologias
+## 🛠️ Tecnologias
 
 - C++
 - SFML
@@ -17,8 +17,10 @@ El objetivo del juego es mover al jugador de izquierda a derecha para atrapar co
 
 ## Controles
 
-- A / ← : mover a la izquierda
-- D / → : mover a la derecha
+- W / ↑ : mover hacia arriba
+- A / ← : mover hacia la izquierda
+- S / ↓ : mover hacia abajo
+- D / → : mover hacia la derecha
 
 ---
 
@@ -29,4 +31,13 @@ mkdir build
 cd build
 cmake ..
 make
-./hell-kitchen
+./game
+
+---
+
+## 👥 Integrantes
+
+- Kevin
+- Namir
+
+---
