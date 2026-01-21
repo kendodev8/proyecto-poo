@@ -1,22 +1,30 @@
 #include <SFML/Graphics.hpp>
-#include <SFML/Graphics/RectangleShape.hpp>
+#include "../include/mapa.hpp"
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode({800, 600}), "Hotline Palermo");
+    sf::RenderWindow ventana(sf::VideoMode({800, 600}), "Sokoban");
 
-    sf::RectangleShape shape({16.f, 16.f});
-    shape.setPosition({400.f, 200.f});
+    Mapa mapa;
 
-    while (window.isOpen()) {
-        while (const std::optional event = window.pollEvent()){
+    int nivel1[4][4] = {
+        {0, 0, 0, 0},
+        {0, 1, 1, 0},
+        {0, 1, 1, 0},
+        {0, 0, 0, 0}
+    };
+
+    mapa.cargarNivel(nivel1);
+
+    while (ventana.isOpen()) {
+        while (const std::optional event = ventana.pollEvent()){
             if (event->is<sf::Event::Closed>()){
-                window.close();
+                ventana.close();
             }
         }
 
-        window.clear();
-        window.draw(shape);
-        window.display();
+        ventana.clear();
+        mapa.renderizar(ventana);
+        ventana.display();
     }
 
     return 0;
