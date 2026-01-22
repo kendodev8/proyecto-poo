@@ -8,6 +8,8 @@ find_package(SFML 3.0.2 COMPONENTS Graphics Window Audio System REQUIRED)
 add_executable(game
     src/main.cpp
     src/mapa.cpp
+    src/niveles.cpp
+    src/jugador.cpp
 )
 
 target_include_directories(game PRIVATE include)
