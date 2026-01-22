@@ -1,17 +1,16 @@
+#pragma once
+
 #include <SFML/Graphics.hpp>
-
-constexpr int ANCHO_MAX = 4;
-constexpr int ALTO_MAX = 4;
-constexpr float TAMAÑO_TILE = 32.f;
-
+#include "../include/datanivel.hpp"
+#include "../include/jugador.hpp"
 
 class Mapa {
     private: 
-        int mapa[ANCHO_MAX][ALTO_MAX];
+        grillaNivel grillaMapa;
         
     public:
         Mapa();
 
-        void cargarNivel(int nivel[ANCHO_MAX][ALTO_MAX]);
+        void cargarNivel(const grillaNivel& nivel, Jugador& jugador);
         void renderizar(sf::RenderWindow& ventana);
 };
