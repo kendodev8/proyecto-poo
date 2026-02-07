@@ -10,7 +10,8 @@ class Mapa {
         
     public:
         Mapa();
-
+        int getTile(int x , int y);
+        void setTile(int x, int y, int valor);
         void cargarNivel(const grillaNivel& nivel, Jugador& jugador);
         void renderizar(sf::RenderWindow& ventana);
 };
