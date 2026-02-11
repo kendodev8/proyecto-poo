@@ -7,7 +7,7 @@ class Entidad {
     public:
         virtual ~Entidad() = default;
 
-        void setPosInicial(sf::Vector2f pos){
+        void setPos(sf::Vector2f pos){
             printf("Pos X: %f\n", pos.x);
             printf("Pos Y: %f\n", pos.y);
             posInicial = pos;
@@ -15,7 +15,7 @@ class Entidad {
             printf("Pos Y: %f\n", posInicial.y);
         }
 
-        sf::Vector2f getPosInicial(){
+        sf::Vector2f getPos(){
             return posInicial;
         }
 
