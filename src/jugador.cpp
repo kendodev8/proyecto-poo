@@ -1,27 +1,29 @@
-//#include <cstdio>
+#include <iostream>
 #include "../include/jugador.hpp"
 
-Jugador::Jugador() { 
-    sprite.setSize({32.f, 32.f});
-    sprite.setFillColor(sf::Color::Blue);
+Jugador::Jugador()
+{ 
+    if(!texturaJugador.loadFromFile("./assets/jugador.png")){
+        std::cerr << "Error cargando jugador.png" << std::endl;
+    }
 }
 
-void Jugador::setPosInicial(sf::Vector2f pos) {
-    this->posInicial = pos; //pr si reinicio el lvl
-    sprite.setPosition(pos);
+void Jugador::setPos(sf::Vector2f pos){
+    posicion = pos;
 }
 
-void Jugador::renderizar(sf::RenderWindow &ventana) { 
-    //sprite.setPosition(posInicial);
-    //printf("Pos X: %f\n", posInicial.x);
-    //printf("Pos Y: %f\n", posInicial.y);
-    ventana.draw(sprite);
+void Jugador::renderizar(sf::RenderWindow &ventana){
+    sf::Sprite spriteJugador(texturaJugador);
+    spriteJugador.setPosition(posicion);
+    std::cout << "Posicion: (" << spriteJugador.getPosition().x << ", " << spriteJugador.getPosition().y << ")" << std::endl;
+    std::cout << "Escala: (" << spriteJugador.getScale().x << ", " << spriteJugador.getScale().y << ")" << std::endl;
+    
+    auto bounds = spriteJugador.getGlobalBounds();
+    std::cout << "Bounds position: (" << bounds.position.x << ", " << bounds.position.y << std::endl;
+    std::cout << "Bounds size: (" << bounds.size.x << ", " << bounds.size.y << ")" << std::endl;
+    ventana.draw(spriteJugador);
 }
 
-void Jugador::mover(float x,float y){
-    sprite.move({x,y});
-}
-
-sf::Vector2f Jugador::getPosInicial() {
-    return this->posInicial;
+sf::Vector2f Jugador::getPos(){
+    return posicion;
 }
