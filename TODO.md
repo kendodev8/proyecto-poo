@@ -19,51 +19,51 @@ Lista de tareas planificadas para el desarrollo del proyecto.
 - [x] Crear clase `Mapa`
 - [x] Método para cargar niveles
 - [x] Método para renderizar el nivel
-- [ ] Definir formato final de niveles (matriz 2D)
-- [ ] Crear niveles de prueba
-- [ ] Sistema para cambiar de nivel
+- [x] Definir formato final de niveles (matriz 2D)
+- [x] Crear niveles de prueba
+- [x] Sistema para cambiar de nivel
 
 ---
 
 ## 🧍 Jugador
 
-- [ ] Representación del jugador
-- [ ] Movimiento en grilla
-- [ ] Restricción por paredes
-- [ ] Interacción con cajas
+- [x] Representación del jugador
+- [x] Movimiento en grilla
+- [x] Restricción por paredes
+- [x] Interacción con cajas
 
 ---
 
 ## 📦 Cajas
 
-- [ ] Movimiento de cajas
-- [ ] Validar empuje correcto
-- [ ] Evitar empujar contra paredes u otras cajas
+- [x] Movimiento de cajas
+- [x] Validar empuje correcto
+- [x] Evitar empujar contra paredes u otras cajas
 
 ---
 
 ## 🎯 Objetivos
 
-- [ ] Definir posiciones objetivo
-- [ ] Verificar caja sobre objetivo
-- [ ] Detección de nivel completado
+- [x] Definir posiciones objetivo
+- [x] Verificar caja sobre objetivo
+- [x] Detección de nivel completado
 
 ---
 
 ## 🎮 Juego
 
-- [ ] Clase `Game` o similar
-- [ ] Loop principal del juego
-- [ ] Manejo de input
-- [ ] Condición de victoria
-- [ ] Avance de niveles
+- [x] Clase `Juego` o similar
+- [x] Loop principal del juego
+- [x] Manejo de input
+- [x] Condición de victoria
+- [x] Avance de niveles
 
 ---
 
 ## 🧼 Extras
 
 - [ ] Menú simple
-- [ ] Reiniciar nivel
+- [x] Reiniciar nivel
 - [ ] Contador de movimientos
 - [ ] Pantalla de victoria
 

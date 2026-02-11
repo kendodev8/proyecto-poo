@@ -12,6 +12,9 @@ cmake_install.cmake
 *.out
 *.exe
 
+# Binarios
+*.dll
+
 # Objetos
 *.o
 *.obj
