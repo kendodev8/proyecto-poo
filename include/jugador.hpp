@@ -8,7 +8,6 @@ class Jugador {
         Jugador();
         void renderizar(sf::RenderWindow& ventana);
         void setPos(sf::Vector2f pos);
-
         bool cargarTextura();
         sf::Vector2f getPos();
 

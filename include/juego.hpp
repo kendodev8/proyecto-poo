@@ -5,10 +5,9 @@
 #include "mapa.hpp"
 #include "niveles.hpp"
 
-enum class EstadoJuego {
-    MENU,
-    JUGANDO,
-    SALIR
+struct Estado {
+    grillaNivel copiaGrilla;
+    sf::Vector2f posicionJugador;
 };
 
 class Juego {
@@ -20,13 +19,18 @@ class Juego {
         void manejarInput();
         void actualizar();
         void renderizar();
+        void intentarMover(int dx, int dy);
+        void guardarEstado();
+        void deshacerMovimiento();
 
         sf::RenderWindow ventana;
 
-        EstadoJuego estadoActual = EstadoJuego::MENU;
         Jugador jugador;
         Mapa mapa;
         Niveles niveles;
+        std::vector<Estado> historial;
 
         int nivelActual;
+
+        sf::Font fuente;
 };

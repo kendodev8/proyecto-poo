@@ -10,11 +10,14 @@ class Mapa {
         Mapa();
 
         int getTile(int x , int y);
+        void setTile(int x, int y, int valor);
+
+        grillaNivel getGrilla(){ return grillaMapa; }
+        void setGrilla(const grillaNivel& nuevaGrilla){ grillaMapa = nuevaGrilla; }
+
         bool nivelCompletado();
         bool cargarTexturas();
-
         void chequearBotones();
-        void setTile(int x, int y, int valor);
         void cargarNivel(const grillaNivel& nivel, Jugador& jugador);
         void renderizar(sf::RenderWindow& ventana);
     
