@@ -4,16 +4,12 @@ Juego desarrollado en C++ utilizando la libreria SFML como proyecto para la mate
 
 El objetivo del juego es resolver puzzles empujando cajas hacia puntos específicos para progresar de nivel.
 
----
-
 ## 🛠️ Tecnologias
 
 - C++
 - SFML
 - CMake
 - Github
-
----
 
 ## Controles
 
@@ -22,8 +18,6 @@ El objetivo del juego es resolver puzzles empujando cajas hacia puntos específi
 - S / ↓ : mover hacia abajo
 - D / → : mover hacia la derecha
 
----
-
 ## Compilación (Linux)
 
 ```bash
@@ -31,14 +25,10 @@ mkdir build
 cd build
 cmake ..
 make
-./game
+./sokoban
 ```
-
----
 
 ## 👥 Integrantes
 
 - Kevin
 - Namir
-
----
