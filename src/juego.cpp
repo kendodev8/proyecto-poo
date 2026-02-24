@@ -2,10 +2,38 @@
 
 Juego::Juego() : 
     ventana(sf::VideoMode({384, 384}), "Sokoban"),
-    fuente("./assets/fuente.ttf")
+    fuente("./assets/fuente.ttf"),
+    textoVictoria(fuente)
 {
     ventana.setFramerateLimit(30);
-    nivelActual = 0;
+
+    //carpgo AUDIO
+    if(musicaFondo.openFromFile("./assets/musica1.mp3")){
+        musicaFondo.setLooping(true); 
+        musicaFondo.setVolume(50.f); 
+        musicaFondo.play();
+    }
+    if(bufferMovimiento.loadFromFile("./assets/movimiento.mp3")){
+        sonidoMovimiento.emplace(bufferMovimiento);
+        sonidoMovimiento->setVolume(100.f);
+    }
+
+    if(bufferSiguiente.loadFromFile("./assets/siguiente.mp3")){
+        sonidoSiguiente.emplace(bufferSiguiente);
+    }
+    if(bufferVictoria.loadFromFile("./assets/victoria.mp3")){
+        sonidoVictoria.emplace(bufferVictoria);
+    }
+
+    //pantalla y texto
+    pantallaActual = Pantalla::JUGANDO; // Arrancamos jugando
+    
+    textoVictoria.setString("¡FELICITACIONES!\nPasaste todo el juego.\n\n(Pronto habra un menu aqui)");
+    textoVictoria.setCharacterSize(24);
+    textoVictoria.setFillColor(sf::Color::White);
+    textoVictoria.setPosition({30.f, 150.f});
+
+    nivelActual = 6;
     mapa.cargarNivel(niveles.getNivel(nivelActual), jugador);
 }
 
@@ -17,49 +45,84 @@ void Juego::run(){
 }
 
 void Juego::actualizar(){
+    // SOLO reviso las cajas y el movimiento si estamos jugando
     manejarInput();
-    mapa.chequearBotones();
+    if (pantallaActual == Pantalla::JUGANDO) {
+        
+        mapa.chequearBotones();
 
-    if(mapa.nivelCompletado()){
-        nivelActual++;
-        mapa.cargarNivel(niveles.getNivel(nivelActual), jugador);
-        historial.clear();
+        if(mapa.nivelCompletado()){
+            nivelActual++;
+            
+            // Si todavía hay niveles, pal el sig
+            if(nivelActual < niveles.getCantidad()){
+                if(sonidoSiguiente) sonidoSiguiente->play();
+                mapa.cargarNivel(niveles.getNivel(nivelActual), jugador);
+                historial.clear();
+            } else {
+            // Si ganan, toca el sonido UNA SOLA VEZ y cambia la pantalla, 
+            // no sabes el quilombo que tenia con esto
+                if(sonidoVictoria) sonidoVictoria->play();
+                pantallaActual = Pantalla::VICTORIA;
+            }
+        }
+        
     }
+    // Si la pantallaActual es VICTORIA, el juego ignora todo lo de arriba 
+    // y se queda tranquilo mostrando el texto
 }
 
 void Juego::renderizar(){
     ventana.clear();
-    mapa.renderizar(ventana);
-    jugador.renderizar(ventana);
+
+    if (pantallaActual == Pantalla::JUGANDO) {
+        mapa.renderizar(ventana);
+        jugador.renderizar(ventana);
+    } 
+    else if (pantallaActual == Pantalla::VICTORIA) {
+        ventana.draw(textoVictoria); // Pantalla negra con texto por ahora
+    }
+
     ventana.display();
 }
 
 void Juego::manejarInput(){
     while(const std::optional evento = ventana.pollEvent()){
+
         if(evento->is<sf::Event::Closed>()){
             ventana.close();
         }
 
         if(const auto* teclaPresionada = evento->getIf<sf::Event::KeyPressed>()){
-            int dx = 0;
-            int dy = 0;
+            
+            //habilito teclas solo si juego
+            if (pantallaActual == Pantalla::JUGANDO) {
+                int dx = 0;
+                int dy = 0;
 
-            if(teclaPresionada->code == sf::Keyboard::Key::Right || teclaPresionada->code == sf::Keyboard::Key::D) dx = 1;
-            else if(teclaPresionada->code == sf::Keyboard::Key::Left || teclaPresionada->code == sf::Keyboard::Key::A) dx = -1;
-            else if(teclaPresionada->code == sf::Keyboard::Key::Up || teclaPresionada->code == sf::Keyboard::Key::W) dy = -1;
-            else if(teclaPresionada->code == sf::Keyboard::Key::Down || teclaPresionada->code == sf::Keyboard::Key::S) dy = 1;
+                if(teclaPresionada->code == sf::Keyboard::Key::Right || teclaPresionada->code == sf::Keyboard::Key::D) dx = 1;
+                else if(teclaPresionada->code == sf::Keyboard::Key::Left || teclaPresionada->code == sf::Keyboard::Key::A) dx = -1;
+                else if(teclaPresionada->code == sf::Keyboard::Key::Up || teclaPresionada->code == sf::Keyboard::Key::W) dy = -1;
+                else if(teclaPresionada->code == sf::Keyboard::Key::Down || teclaPresionada->code == sf::Keyboard::Key::S) dy = 1;
 
-            if(dx != 0 || dy != 0){
-                intentarMover(dx, dy);
+                if(dx != 0 || dy != 0){
+                    intentarMover(dx, dy);
+                }
+
+                if(teclaPresionada->code == sf::Keyboard::Key::R){
+                    mapa.cargarNivel(niveles.getNivel(nivelActual), jugador);
+                    historial.clear();
+                }
+
+                if(teclaPresionada->code == sf::Keyboard::Key::Z){
+                    deshacerMovimiento();
+                }
             }
-
-            if(teclaPresionada->code == sf::Keyboard::Key::R){
-                mapa.cargarNivel(niveles.getNivel(nivelActual), jugador);
-                historial.clear();
-            }
-
-            if(teclaPresionada->code == sf::Keyboard::Key::Z){
-                deshacerMovimiento();
+            //Si estoyen la VICTORIA y toco ESCAPE, cierro a la bosta , pora hora 
+            else if (pantallaActual == Pantalla::VICTORIA) {
+                if(teclaPresionada->code == sf::Keyboard::Key::Escape){
+                    ventana.close();
+                }
             }
         }
     }
@@ -84,6 +147,9 @@ void Juego::intentarMover(int dx, int dy){
 
     if(tileDestino == PISO || tileDestino == BOTON || empujeValido){
         guardarEstado();
+
+        //sonido de pizadas copadas
+        if(sonidoMovimiento){sonidoMovimiento->play();}
 
         if(empujeValido){
             //Si muevo un 3 (Caja normal), estaba en el piso -> Dejo un 0 (piso)

@@ -9,6 +9,10 @@ class Niveles {
 
         const grillaNivel& getNivel(int indice) const;
 
+        int getCantidad() const { 
+        return grillas.size(); 
+    }
+
     private:
         std::vector<grillaNivel> grillas;
 };
