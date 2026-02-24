@@ -12,7 +12,7 @@ struct Estado {
     sf::Vector2f posicionJugador;
 };
 
-enum class Pantalla { MENU, JUGANDO, VICTORIA };
+enum class Pantalla { MENU, OPCIONES, JUGANDO, VICTORIA };
 
 class Juego {
     public:
@@ -20,10 +20,10 @@ class Juego {
         void run();
 
     private:
-        Pantalla pantallaActual;
-        sf::Text textoVictoria;
-
         
+        sf::SoundBuffer bufferSelect;
+        std::optional<sf::Sound> sonidoSelect;
+
         sf::SoundBuffer bufferSiguiente;
         std::optional<sf::Sound> sonidoSiguiente;
 
@@ -33,6 +33,36 @@ class Juego {
         sf::Music musicaFondo;
         sf::SoundBuffer bufferMovimiento;
         std::optional<sf::Sound> sonidoMovimiento;
+
+        Pantalla pantallaActual;
+        Pantalla pantallaAnterior; // Para saber a dónde volver (al menú o al juego)
+
+        sf::Text textoVictoria;
+
+        // --- COSAS VISUALES DEL MENÚ Y OPCIONES ---
+        sf::Texture texturaFondoMenu;
+        sf::Texture texturaUI;
+        sf::Texture texturaAjustes;
+
+        // Menú Principal
+        sf::Sprite spriteFondoMenu;
+        sf::Sprite botonJugar;
+        sf::Text textoJugar;
+        sf::Sprite botonOpciones;
+        sf::Text textoOpciones;
+
+        // Pantalla de Opciones
+        sf::Text textoSalir;
+        sf::Sprite botonVolver;
+        sf::Text textoVolver;
+        sf::RectangleShape barraVolumenFondo;
+        sf::Sprite perillaVolumen;
+        sf::Text textoVolumen;
+        int opcionSeleccionada; // 0 o 1 (para saber qué botón brilla)
+        int nivelVolumen;       // Del 0 al 10
+
+        // In-Game
+        sf::Sprite spriteAjustes; // La tuerca en la esquina
 
         void manejarInput();
         void actualizar();
