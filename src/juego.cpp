@@ -14,7 +14,8 @@ Juego::Juego() :
     botonVolver(texturaUI),
     perillaVolumen(texturaUI),
     spriteAjustes(texturaAjustes),
-    textoSalir(fuente)
+    textoSalir(fuente),
+    textoNivelUI(fuente)
 {
     ventana.setFramerateLimit(30);
 
@@ -77,17 +78,23 @@ Juego::Juego() :
     //TEXTOS
     textoJugar.setString("JUGAR");
     textoJugar.setCharacterSize(30); 
-    textoJugar.setFillColor(sf::Color::White);
+    textoJugar.setFillColor(sf::Color::Yellow);
     textoJugar.setOutlineColor(sf::Color::Black); 
     textoJugar.setOutlineThickness(4.f); 
     textoJugar.setPosition({145.f, 160.f}); 
+
+    textoNivelUI.setString("Nivel: 1");
+    textoNivelUI.setCharacterSize(20); 
+    textoNivelUI.setFillColor(sf::Color::White);
+    textoNivelUI.setOutlineColor(sf::Color::Black);
+    textoNivelUI.setOutlineThickness(3.f); 
 
     textoSalir.setString("MENU PRINCIPAL");
     textoSalir.setCharacterSize(22); 
     textoSalir.setFillColor(sf::Color::White);
     textoSalir.setOutlineColor(sf::Color::Black);
     textoSalir.setOutlineThickness(4.f);
-    textoSalir.setPosition({105.f, 260.f}); // Centrado en los ladrillos
+    textoSalir.setPosition({105.f, 265.f}); // Centrado en los ladrillos
 
     textoOpciones.setString("VOLUMEN");
     textoOpciones.setCharacterSize(26);
@@ -101,7 +108,7 @@ Juego::Juego() :
     textoVolver.setFillColor(sf::Color::White);
     textoVolver.setOutlineColor(sf::Color::Black);
     textoVolver.setOutlineThickness(4.f);
-    textoVolver.setPosition({145.f, 230.f}); 
+    textoVolver.setPosition({147.f, 230.f}); 
 
     textoVolumen.setString("Volumen: 5");
     textoVolumen.setCharacterSize(22); 
@@ -120,12 +127,22 @@ Juego::Juego() :
     nivelVolumen = 5;       // Volumen a la mitad (nivel 5)
 
     //TEXTO VICTORIA Y CARGA DE NIVEL, agradece que te ordeno todo
-    textoVictoria.setString("¡FELICITACIONES!\nPasaste todo el juego.\n\n(hasta que haya menu)");
+    textoVictoria.setString("FELICITACIONES!\nPasaste todo el juego");
     textoVictoria.setCharacterSize(24);
     textoVictoria.setFillColor(sf::Color::White);
-    textoVictoria.setPosition({30.f, 150.f});
+    textoVictoria.setOutlineColor(sf::Color::Black);
+    textoVictoria.setOutlineThickness(4.f);
+    textoVictoria.setPosition({85.f, 150.f}); //140f hiria 30f
+    
+    //FONDO PANTALLA DE VICTORIA
+    if (!texturaFondoVictoria.loadFromFile("assets/fondoVictoria.png")) {
+    }
+    fondoVictoria.setSize(sf::Vector2f(384.f, 384.f));
+    fondoVictoria.setTexture(&texturaFondoVictoria);
 
-    nivelActual = 0;
+    //
+
+    nivelActual = 6;
     mapa.cargarNivel(niveles.getNivel(nivelActual), jugador);
 }
 
@@ -184,11 +201,27 @@ void Juego::renderizar(){
         ventana.draw(textoSalir);
     }
     else if (pantallaActual == Pantalla::JUGANDO) {
+    
         mapa.renderizar(ventana);
         jugador.renderizar(ventana);
+
+        //esto hace que el número se actualice en vivo
+        textoNivelUI.setString("Nivel: " + std::to_string(nivelActual + 1));
+    
+        //centrado aunque el número sea de dos cifras
+        sf::FloatRect limites = textoNivelUI.getLocalBounds();
+        textoNivelUI.setOrigin(sf::Vector2f(limites.size.x / 2.f, 0.f));
+        textoNivelUI.setPosition({320.f, 7.f});
+
+        ventana.draw(textoNivelUI);
     } 
     else if (pantallaActual == Pantalla::VICTORIA) {
+        ventana.draw(fondoVictoria);
+
         ventana.draw(textoVictoria);
+
+        textoSalir.setPosition(sf::Vector2f(105.f, 250.f));
+        ventana.draw(textoSalir);
     }
 
     ventana.display();
@@ -295,12 +328,20 @@ void Juego::manejarInput(){
                 
                 // Con Escape abrplas opciones desde el juego
                 if(teclaPresionada->code == sf::Keyboard::Key::Escape){
+                    pantallaAnterior = Pantalla::JUGANDO;
                     pantallaActual = Pantalla::OPCIONES;
                     opcionSeleccionada = 0; // Entro con el volumen seleccionado
                 }
             }
             else if (pantallaActual == Pantalla::VICTORIA) {
-                if(teclaPresionada->code == sf::Keyboard::Key::Escape) ventana.close();
+            if(teclaPresionada->code == sf::Keyboard::Key::Escape) ventana.close();//lo cierra
+            //Enter para volver al menu
+            else if(teclaPresionada->code == sf::Keyboard::Key::Enter) {
+                nivelActual = 0; 
+                mapa.cargarNivel(niveles.getNivel(nivelActual), jugador); //cargo para q no qiede el ultimo de fondo
+                historial.clear(); //borron y cuenta nnueva
+                pantallaActual = Pantalla::MENU;
+                opcionSeleccionada = 0; 
             }
         }
     }
@@ -322,10 +363,14 @@ void Juego::manejarInput(){
 
         if(opcionSeleccionada == 0) textoVolumen.setFillColor(sf::Color(80, 80, 80));
         if(opcionSeleccionada == 1) textoVolver.setFillColor(sf::Color::Yellow);
-        if(opcionSeleccionada == 2) textoSalir.setFillColor(sf::Color::Yellow); // <-- ¡Ahora sí va a brillar!
+        if(opcionSeleccionada == 2) textoSalir.setFillColor(sf::Color::Yellow);
+    }
+    else if (pantallaActual == Pantalla::VICTORIA) {
+        textoVictoria.setFillColor(sf::Color::White); 
+        textoSalir.setFillColor(sf::Color::Yellow); //Para q brille 
     }
 }
-
+}
 void Juego::intentarMover(int dx, int dy){
     sf::Vector2f posActual = jugador.getPos();
     int xActual = (int)(posActual.x / TAMAÑO_TILE);

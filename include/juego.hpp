@@ -43,6 +43,7 @@ class Juego {
         sf::Texture texturaFondoMenu;
         sf::Texture texturaUI;
         sf::Texture texturaAjustes;
+        sf::Texture texturaFondoVictoria;
 
         // Menú Principal
         sf::Sprite spriteFondoMenu;
@@ -50,9 +51,11 @@ class Juego {
         sf::Text textoJugar;
         sf::Sprite botonOpciones;
         sf::Text textoOpciones;
+        sf::RectangleShape fondoVictoria;
 
         // Pantalla de Opciones
         sf::Text textoSalir;
+        sf::Text textoNivelUI; //capaz lo pongo en In-Game
         sf::Sprite botonVolver;
         sf::Text textoVolver;
         sf::RectangleShape barraVolumenFondo;
