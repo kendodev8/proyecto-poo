@@ -2,12 +2,13 @@
 #include <SFML/Graphics.hpp>
 #include "../include/juego.hpp"
 #include "../include/opciones.hpp"
+#include "../include/victoria.hpp"
 
 Partida::Partida() :
     fuente("./assets/fuente.ttf"),
     texto(fuente)
 {
-    nivelActual = 0;
+    nivelActual = 6;
     mapa.cargarNivel(niveles.getNivel(nivelActual), jugador);
 }
 
@@ -25,6 +26,9 @@ void Partida::actualizar(Juego &juego){
 
         if(nivelActual < niveles.getCantidad()){
             mapa.cargarNivel(niveles.getNivel(nivelActual), jugador);
+        } else {
+            //SI YA NO HAY MÁS NIVELES, GANAs
+            juego.cambiarEscena(new Victoria());
         }
     }
 }
@@ -47,7 +51,7 @@ void Partida::procesarEvento(Juego &juego, const sf::Event &evento){
         if(teclaPresionada->code == sf::Keyboard::Key::Z) deshacerMovimiento();
 
         if(teclaPresionada->code == sf::Keyboard::Key::Escape){
-            juego.cambiarEscena(new Opciones);
+            juego.pausarJuego(new Opciones(false)); //Pausita en vez de cambiar
         }
     }
 }

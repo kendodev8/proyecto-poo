@@ -20,6 +20,8 @@ class Juego {
         Juego(Escena *primerEscena);
         void cambiarEscena(Escena *siguienteEscena);
         void run();
+        void pausarJuego(Escena* menuPausa);
+        void reanudarJuego();
         ~Juego();
 
     private:
@@ -85,4 +87,7 @@ class Juego {
         sf::Font fuente;
 
         Escena *escena, *siguiente = nullptr;
+
+        Escena* escenaPausada = nullptr;
+        bool pausando = false;
 };

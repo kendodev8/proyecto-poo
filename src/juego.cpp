@@ -161,11 +161,20 @@ void Juego::run(){
         escena->renderizar(ventana);
         ventana.display();
 
-        if(siguiente){
-            delete escena;
-            escena = siguiente;
-            siguiente = nullptr;
-        }
+    if (siguiente != nullptr) {
+        if (pausando) {
+        escenaPausada = escena; 
+        escena = siguiente; 
+        pausando = false;
+        siguiente = nullptr;
+        continue; 
+    }
+    if (escena != nullptr) {
+        delete escena;
+    }
+    escena = siguiente;
+    siguiente = nullptr;
+}
     }
 }
 
@@ -449,3 +458,15 @@ void Juego::actualizar(){
     
     historial.pop_back();
 }*/
+
+void Juego::pausarJuego(Escena* menuPausa) {
+    this->pausando = true;
+    this->siguiente = menuPausa;
+}
+
+void Juego::reanudarJuego() {
+    if (this->escenaPausada != nullptr) {
+        this->siguiente = this->escenaPausada;
+        this->escenaPausada = nullptr;
+};
+}

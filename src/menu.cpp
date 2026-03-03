@@ -7,17 +7,24 @@
 Menu::Menu() :
     fuente("./assets/fuente.ttf"),
     textoJugar(fuente),
-    textoScoreboard(fuente)
+    textoScoreboard(fuente),
+    spriteFondoMenu(texturaFondoMenu)
 {
+    if (texturaFondoMenu.loadFromFile("./assets/menu_fondo.png")) {
+        spriteFondoMenu.setTexture(texturaFondoMenu, true);
+        sf::Vector2u tam = texturaFondoMenu.getSize();
+        spriteFondoMenu.setScale({384.f / tam.x, 384.f / tam.y});
+    }
+    
     textoJugar.setString("JUGAR");
-    textoJugar.setPosition({145.f, 160.f});
+    textoJugar.setPosition({150.f, 150.f});
     textoJugar.setCharacterSize(30);
     textoJugar.setFillColor(sf::Color::White);
     textoJugar.setOutlineColor(sf::Color::Black);
     textoJugar.setOutlineThickness(4.f);
 
-    textoScoreboard.setString("SCOREBOARD");
-    textoScoreboard.setPosition({135.f, 220.f});
+    textoScoreboard.setString("OPCIONES");
+    textoScoreboard.setPosition({130.f, 200.f});
     textoScoreboard.setCharacterSize(30);
     textoScoreboard.setFillColor(sf::Color::White);
     textoScoreboard.setOutlineColor(sf::Color::Black);
@@ -27,6 +34,7 @@ Menu::Menu() :
 }
 
 void Menu::renderizar(sf::RenderWindow &ventana){
+    ventana.draw(spriteFondoMenu);
     ventana.draw(textoJugar);
     ventana.draw(textoScoreboard);
 }
@@ -54,7 +62,7 @@ void Menu::procesarEvento(Juego &juego, const sf::Event &evento){
                     juego.cambiarEscena(new Partida);
                 }
                 else if(opcionSeleccionada == 1) {
-                    juego.cambiarEscena(new Opciones);
+                    juego.cambiarEscena(new Opciones(true));
                     opcionSeleccionada = 0;
                 }
             }

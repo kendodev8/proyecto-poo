@@ -16,6 +16,8 @@ class Menu : public Escena {
     private:
         sf::Font fuente;
         sf::Text textoJugar, textoScoreboard;
+        sf::Texture texturaFondoMenu;
+        sf::Sprite spriteFondoMenu;
 
         int opcionSeleccionada;
 
