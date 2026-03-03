@@ -1,7 +1,8 @@
 #include "../include/juego.hpp"
 
-Juego::Juego() : 
+Juego::Juego(Escena *primerEscena) : 
     ventana(sf::VideoMode({384, 384}), "Sokoban"),
+    escena(primerEscena),
     fuente("./assets/fuente.ttf"),
     textoVictoria(fuente),
     textoJugar(fuente),
@@ -13,13 +14,13 @@ Juego::Juego() :
     botonOpciones(texturaUI),
     botonVolver(texturaUI),
     perillaVolumen(texturaUI),
-    spriteAjustes(texturaAjustes),
+    //spriteAjustes(texturaAjustes),
     textoSalir(fuente),
     textoNivelUI(fuente)
 {
     ventana.setFramerateLimit(30);
 
-    //CARGAR AUDIO
+    /*CARGAR AUDIO
     if(bufferSelect.loadFromFile("./assets/select.mp3")){
         sonidoSelect.emplace(bufferSelect);
     }
@@ -38,13 +39,13 @@ Juego::Juego() :
     }
     if(bufferVictoria.loadFromFile("./assets/victoria.mp3")){
         sonidoVictoria.emplace(bufferVictoria);
-    }
+    }*/
 
-    //CARGAR GRÁFICOS DEL MENÚ
-    pantallaActual = Pantalla::MENU; 
-    pantallaAnterior = Pantalla::MENU; //pr si configuro algo para q vuelva al menu
+    // CARGAR GRÁFICOS DEL MENÚ
+    //pantallaActual = Pantalla::MENU;
+    //pantallaAnterior = Pantalla::MENU;
 
-    if (texturaFondoMenu.loadFromFile("./assets/menu_fondo.png")) {
+    /*if (texturaFondoMenu.loadFromFile("./assets/menu_fondo.png")) {
         spriteFondoMenu.setTexture(texturaFondoMenu,true); 
         sf::Vector2u tam = texturaFondoMenu.getSize();
         spriteFondoMenu.setScale({384.f / tam.x, 384.f / tam.y});
@@ -56,32 +57,32 @@ Juego::Juego() :
         spriteAjustes.setScale({0.02f, 0.02f}); 
     }*/
 
-    //UI
-    if (texturaUI.loadFromFile("./assets/ui_cuadrado.png")) {
+    // UI
+    /*if (texturaUI.loadFromFile("./assets/ui_cuadrado.png")) {
         botonJugar.setTexture(texturaUI, true);
         botonJugar.setPosition({115.f, 100.f});
         botonJugar.setScale({3.0f, 1.3f}); 
 
-        botonOpciones.setTexture(texturaUI, true); 
+        botonOpciones.setTexture(texturaUI, true);
         botonOpciones.setPosition({115.f, 180.f});
         botonOpciones.setScale({3.0f, 1.3f});
 
-        botonVolver.setTexture(texturaUI, true); 
+        botonVolver.setTexture(texturaUI, true);
         botonVolver.setPosition({115.f, 300.f});
         botonVolver.setScale({3.0f, 1.3f});
 
-        perillaVolumen.setTexture(texturaUI, true); 
-        perillaVolumen.setPosition({170.f, 185.f}); 
-        perillaVolumen.setScale({0.10f, 0.8f}); 
-    }
+        perillaVolumen.setTexture(texturaUI, true);
+        perillaVolumen.setPosition({170.f, 185.f});
+        perillaVolumen.setScale({0.10f, 0.8f});
+    }*/
 
-    //TEXTOS
-    textoJugar.setString("JUGAR"); //hecho a pata noma
-    textoJugar.setCharacterSize(30); 
+    // TEXTOS
+    /*textoJugar.setString("JUGAR");
+    textoJugar.setCharacterSize(30);
     textoJugar.setFillColor(sf::Color::Yellow);
-    textoJugar.setOutlineColor(sf::Color::Black); 
-    textoJugar.setOutlineThickness(4.f); 
-    textoJugar.setPosition({145.f, 160.f}); 
+    textoJugar.setOutlineColor(sf::Color::Black);
+    textoJugar.setOutlineThickness(4.f);
+    textoJugar.setPosition({145.f, 160.f});
 
     textoNivelUI.setString("Nivel: 1");
     textoNivelUI.setCharacterSize(20); 
@@ -108,14 +109,14 @@ Juego::Juego() :
     textoVolver.setFillColor(sf::Color::White);
     textoVolver.setOutlineColor(sf::Color::Black);
     textoVolver.setOutlineThickness(4.f);
-    textoVolver.setPosition({147.f, 230.f}); 
+    textoVolver.setPosition({147.f, 230.f});
 
-    textoVolumen.setString("Volumen: 5"); //default a la mitad
-    textoVolumen.setCharacterSize(22); 
-    textoVolumen.setFillColor(sf::Color::Black); 
-    textoVolumen.setOutlineColor(sf::Color::White); 
+    textoVolumen.setString("Volumen: 5");
+    textoVolumen.setCharacterSize(22);
+    textoVolumen.setFillColor(sf::Color::Black);
+    textoVolumen.setOutlineColor(sf::Color::White);
     textoVolumen.setOutlineThickness(2.f);
-    textoVolumen.setPosition({138.f, 150.f}); 
+    textoVolumen.setPosition({138.f, 150.f});
 
     //barra (Gris), pra el vlmen
     barraVolumenFondo.setFillColor(sf::Color(100, 100, 100));
@@ -126,7 +127,7 @@ Juego::Juego() :
     opcionSeleccionada = 0; // Arranca brillando "JUGAR"
     nivelVolumen = 5;       // Volumen a la mitad (nivel 5)
 
-    //TEXTO VICTORIA Y CARGA DE NIVEL, agradece que te ordeno todo
+    //TEXTO VICTORIA Y CARGA DE NIVEL
     textoVictoria.setString("FELICITACIONES!\nPasaste todo el juego");
     textoVictoria.setCharacterSize(24);
     textoVictoria.setFillColor(sf::Color::White);
@@ -135,58 +136,107 @@ Juego::Juego() :
     textoVictoria.setPosition({85.f, 150.f}); //140f hiria 30f
     
     //FONDO PANTALLA DE VICTORIA
-    if (!texturaFondoVictoria.loadFromFile("assets/fondoVictoria.png")) {
+    if(!texturaFondoVictoria.loadFromFile("assets/fondoVictoria.png")) {
     }
     fondoVictoria.setSize(sf::Vector2f(384.f, 384.f));
     fondoVictoria.setTexture(&texturaFondoVictoria);
 
-    //
-
-    nivelActual = 6;
-    mapa.cargarNivel(niveles.getNivel(nivelActual), jugador); //le paso nivel y el jugador para que lo posicione donde corresponde
+    nivelActual = 0;
+    mapa.cargarNivel(niveles.getNivel(nivelActual), jugador);*/
 }
 
 void Juego::run(){
     while(ventana.isOpen()){
-        actualizar();
-        renderizar();
+        while(const std::optional evento = ventana.pollEvent()){
+            if(evento->is<sf::Event::Closed>()){
+                ventana.close();
+            }
+
+            escena->procesarEvento(*this, *evento);
+        }
+
+        escena->actualizar(*this);
+        
+        ventana.clear();
+        escena->renderizar(ventana);
+        ventana.display();
+
+        if(siguiente){
+            delete escena;
+            escena = siguiente;
+            siguiente = nullptr;
+        }
     }
 }
 
+Juego::~Juego(){
+    delete escena;
+}
+
+void Juego::cambiarEscena(Escena * siguienteEscena){
+    siguiente = siguienteEscena;
+}
+
 void Juego::actualizar(){
-    // SOLO reviso las cajas y el movimiento si estamos jugando
-    manejarInput();
-    if (pantallaActual == Pantalla::JUGANDO) {
-        
+    // Solo reviso las cajas y el movimiento si estamos jugando
+    //manejarInput();
+    /*if(pantallaActual == Pantalla::JUGANDO){
         mapa.chequearBotones();
 
         if(mapa.nivelCompletado()){
             nivelActual++;
             
-            // Si todavía hay niveles, pal el sig
             if(nivelActual < niveles.getCantidad()){
                 if(sonidoSiguiente) sonidoSiguiente->play();
                 mapa.cargarNivel(niveles.getNivel(nivelActual), jugador);
                 historial.clear();
             } else {
+            // Si ganan, toca el sonido UNA SOLA VEZ y cambia la pantalla
                 if(sonidoVictoria) sonidoVictoria->play();
                 pantallaActual = Pantalla::VICTORIA;
             }
         }
-        
-    }
-    // Si la pantallaActual es VICTORIA, el juego ignora todo lo de arriba 
-    // y se queda tranquilo mostrando el texto
+    }*/
+
+    // Efectos visuales
+    /*textoJugar.setFillColor(sf::Color::White);
+    textoOpciones.setFillColor(sf::Color::White);
+    textoVolver.setFillColor(sf::Color::White);
+    textoVolumen.setFillColor(sf::Color::Black); 
+
+    if(pantallaActual == Pantalla::MENU){
+        if(opcionSeleccionada == 0) textoJugar.setFillColor(sf::Color::Yellow);
+        if(opcionSeleccionada == 1) textoOpciones.setFillColor(sf::Color::Yellow);
+    } 
+    else if(pantallaActual == Pantalla::OPCIONES){
+        textoVolumen.setFillColor(sf::Color::Black);
+        textoVolver.setFillColor(sf::Color::White);
+        textoSalir.setFillColor(sf::Color::White);
+
+        if(opcionSeleccionada == 0) textoVolumen.setFillColor(sf::Color(80, 80, 80));
+        if(opcionSeleccionada == 1) textoVolver.setFillColor(sf::Color::Yellow);
+        if(opcionSeleccionada == 2) textoSalir.setFillColor(sf::Color::Yellow);
+
+        //ACTUALIZACIÓN GRÁFICA Y DE AUDIO
+        float porcentaje = nivelVolumen * 10.f;
+        musicaFondo.setVolume(porcentaje);
+        if(sonidoMovimiento) sonidoMovimiento->setVolume(porcentaje);
+                
+        textoVolumen.setString("Volumen: " + std::to_string(nivelVolumen));
+        perillaVolumen.setPosition({125.f + (nivelVolumen * 14.f), 195.f});
+    }*/
+    /*else if(pantallaActual == Pantalla::VICTORIA){
+        textoVictoria.setFillColor(sf::Color::White);
+        textoSalir.setFillColor(sf::Color::Yellow);
+    }*/
 }
 
-void Juego::renderizar(){
+/*void Juego::renderizar(){
     ventana.clear();
 
     if (pantallaActual == Pantalla::MENU) {
         ventana.draw(spriteFondoMenu);
-       // ventana.draw(botonJugar);
         ventana.draw(textoJugar);
-        //ventana.draw(botonOpciones);
         ventana.draw(textoOpciones);
     }
     else if (pantallaActual == Pantalla::OPCIONES) {
@@ -212,7 +262,7 @@ void Juego::renderizar(){
         textoNivelUI.setPosition({320.f, 7.f});
 
         ventana.draw(textoNivelUI);
-    } 
+    }
     else if (pantallaActual == Pantalla::VICTORIA) {
         ventana.draw(fondoVictoria);
 
@@ -223,25 +273,23 @@ void Juego::renderizar(){
     }
 
     ventana.display();
-}
+}*/
 
-void Juego::manejarInput(){
+/*void Juego::manejarInput(){
     while(const std::optional evento = ventana.pollEvent()){
-        
         if(evento->is<sf::Event::Closed>()){
             ventana.close();
         }
 
         if(const auto* teclaPresionada = evento->getIf<sf::Event::KeyPressed>()){
-            
             //MENÚ PRINCIPAL
             if (pantallaActual == Pantalla::MENU) {
                 if(teclaPresionada->code == sf::Keyboard::Key::Up || teclaPresionada->code == sf::Keyboard::Key::W){
-                    opcionSeleccionada = 0; 
+                    opcionSeleccionada = 0;
                     if(sonidoSelect) sonidoSelect->play();
                 }
                 else if(teclaPresionada->code == sf::Keyboard::Key::Down || teclaPresionada->code == sf::Keyboard::Key::S){
-                    opcionSeleccionada = 1; 
+                    opcionSeleccionada = 1;
                     if(sonidoSelect) sonidoSelect->play();
                 }
                 else if(teclaPresionada->code == sf::Keyboard::Key::Enter){
@@ -256,9 +304,9 @@ void Juego::manejarInput(){
                     }
                 }
             }
-            //OPCIONES ("PAUSA")
+
+            //OPCIONES (PAUSA)
             else if (pantallaActual == Pantalla::OPCIONES) {
-                
                 if(teclaPresionada->code == sf::Keyboard::Key::Up || teclaPresionada->code == sf::Keyboard::Key::W){
                     if(opcionSeleccionada > 0) {
                         opcionSeleccionada--;
@@ -272,23 +320,23 @@ void Juego::manejarInput(){
                     }
                 }
 
-                //aJUSTAR VOLUMEN
-                if (opcionSeleccionada == 0) {
+                //AJUSTAR VOLUMEN
+                if(opcionSeleccionada == 0){
                     if(teclaPresionada->code == sf::Keyboard::Key::Left || teclaPresionada->code == sf::Keyboard::Key::A){
-                        if(nivelVolumen > 0) {
+                        if(nivelVolumen > 0){
                             nivelVolumen--; 
                         }
                     }
                     else if(teclaPresionada->code == sf::Keyboard::Key::Right || teclaPresionada->code == sf::Keyboard::Key::D){
-                        if(nivelVolumen < 10) {
+                        if(nivelVolumen < 10){
                             nivelVolumen++;
                         }
                     }
                 }
                 //ENTER
                 else if(teclaPresionada->code == sf::Keyboard::Key::Enter){
-                    if(opcionSeleccionada == 1) { 
-                        pantallaActual = pantallaAnterior; 
+                    if(opcionSeleccionada == 1) {
+                        pantallaActual = pantallaAnterior;
                     }
                     else if(opcionSeleccionada == 2) { 
                         nivelActual = 0; 
@@ -296,20 +344,13 @@ void Juego::manejarInput(){
                         historial.clear();
                         
                         pantallaActual = Pantalla::MENU;
-                        opcionSeleccionada = 0; 
+                        opcionSeleccionada = 0;
                     }
                 }
-
-                //ACTUALIZACIÓN GRÁFICA Y DE AUDIO
-                float porcentaje = nivelVolumen * 10.f;
-                musicaFondo.setVolume(porcentaje);
-                if(sonidoMovimiento) sonidoMovimiento->setVolume(porcentaje);
-                
-                textoVolumen.setString("Volumen: " + std::to_string(nivelVolumen));
-                perillaVolumen.setPosition({125.f + (nivelVolumen * 14.f), 195.f});
             }
+
             //CONTROLES: JUGANDO
-            else if (pantallaActual == Pantalla::JUGANDO) {
+            else if(pantallaActual == Pantalla::JUGANDO){
                 int dx = 0, dy = 0;
                 if(teclaPresionada->code == sf::Keyboard::Key::Right || teclaPresionada->code == sf::Keyboard::Key::D) dx = 1;
                 else if(teclaPresionada->code == sf::Keyboard::Key::Left || teclaPresionada->code == sf::Keyboard::Key::A) dx = -1;
@@ -324,52 +365,29 @@ void Juego::manejarInput(){
                 }
                 if(teclaPresionada->code == sf::Keyboard::Key::Z) deshacerMovimiento();
                 
-                // Con Escape abrplas opciones desde el juego
                 if(teclaPresionada->code == sf::Keyboard::Key::Escape){
                     pantallaAnterior = Pantalla::JUGANDO;
                     pantallaActual = Pantalla::OPCIONES;
-                    opcionSeleccionada = 0; // Entro con el volumen seleccionado
+                    opcionSeleccionada = 0;
                 }
             }
-            else if (pantallaActual == Pantalla::VICTORIA) {
-            if(teclaPresionada->code == sf::Keyboard::Key::Escape) ventana.close();//lo cierra
-            //Enter para volver al menu
-            else if(teclaPresionada->code == sf::Keyboard::Key::Enter) {
-                nivelActual = 0; 
-                mapa.cargarNivel(niveles.getNivel(nivelActual), jugador); //cargo para q no qiede el ultimo de fondo
-                historial.clear(); //borron y cuenta nnueva
-                pantallaActual = Pantalla::MENU;
-                opcionSeleccionada = 0; 
+            
+            else if(pantallaActual == Pantalla::VICTORIA){
+                if(teclaPresionada->code == sf::Keyboard::Key::Escape) ventana.close();
+
+                else if(teclaPresionada->code == sf::Keyboard::Key::Enter){
+                    nivelActual = 0; 
+                    mapa.cargarNivel(niveles.getNivel(nivelActual), jugador);
+                    historial.clear();
+                    pantallaActual = Pantalla::MENU;
+                    opcionSeleccionada = 0;
+                }
             }
         }
     }
+}*/
 
-   //efectos visuales
-    textoJugar.setFillColor(sf::Color::White);
-    textoOpciones.setFillColor(sf::Color::White);
-    textoVolver.setFillColor(sf::Color::White);
-    textoVolumen.setFillColor(sf::Color::Black); 
-
-    if (pantallaActual == Pantalla::MENU) {
-        if(opcionSeleccionada == 0) textoJugar.setFillColor(sf::Color::Yellow);
-        if(opcionSeleccionada == 1) textoOpciones.setFillColor(sf::Color::Yellow);
-    } 
-    else if (pantallaActual == Pantalla::OPCIONES) {
-        textoVolumen.setFillColor(sf::Color::Black); 
-        textoVolver.setFillColor(sf::Color::White);
-        textoSalir.setFillColor(sf::Color::White);
-
-        if(opcionSeleccionada == 0) textoVolumen.setFillColor(sf::Color(80, 80, 80));
-        if(opcionSeleccionada == 1) textoVolver.setFillColor(sf::Color::Yellow);
-        if(opcionSeleccionada == 2) textoSalir.setFillColor(sf::Color::Yellow);
-    }
-    else if (pantallaActual == Pantalla::VICTORIA) {
-        textoVictoria.setFillColor(sf::Color::White); 
-        textoSalir.setFillColor(sf::Color::Yellow); //Para q brille 
-    }
-}
-}
-void Juego::intentarMover(int dx, int dy){
+/*void Juego::intentarMover(int dx, int dy){
     sf::Vector2f posActual = jugador.getPos();
     int xActual = (int)(posActual.x / TAMAÑO_TILE);
     int yActual = (int)(posActual.y / TAMAÑO_TILE);
@@ -390,7 +408,7 @@ void Juego::intentarMover(int dx, int dy){
         guardarEstado();
 
         //sonido de pizadas copadas
-        if(sonidoMovimiento){sonidoMovimiento->play();}
+        //if(sonidoMovimiento){sonidoMovimiento->play();}
 
         if(empujeValido){
             //Si muevo un 3 (Caja normal), estaba en el piso -> Dejo un 0 (piso)
@@ -409,18 +427,18 @@ void Juego::intentarMover(int dx, int dy){
         nuevaPos.y += dy * 32.f;
         jugador.setPos(nuevaPos);
     }
-}
+}*/
 
-void Juego::guardarEstado(){
+/*void Juego::guardarEstado(){
     Estado estado;
 
     estado.posicionJugador = jugador.getPos();
     estado.copiaGrilla = mapa.getGrilla();
 
     historial.push_back(estado);
-}
+}*/
 
-void Juego::deshacerMovimiento(){
+/*void Juego::deshacerMovimiento(){
     if(historial.empty()) return;
 
     Estado ultimoEstado = historial.back();
@@ -430,4 +448,4 @@ void Juego::deshacerMovimiento(){
     mapa.setGrilla(ultimoEstado.copiaGrilla);
     
     historial.pop_back();
-}
+}*/

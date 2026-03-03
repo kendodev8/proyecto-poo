@@ -6,14 +6,14 @@ Mapa::Mapa(){
     cargarTexturas();
 }
 
-void Mapa::cargarNivel(const grillaNivel& nivel, Jugador& jugador){ //pra que se adapte a cualquier nivel, sin importar la cantidad de cajas o botones
+void Mapa::cargarNivel(const grillaNivel& nivel, Jugador& jugador){
     botonesNecesarios = 0;
     
     for(int y = 0; y < ALTO_MAX; y++){
         for(int x = 0; x < ANCHO_MAX; x++){
             grillaMapa[y][x] = nivel[y][x];
 
-            if(grillaMapa[y][x] == 9){ //9 seria el spawn
+            if(grillaMapa[y][x] == 9){
                 jugador.setPos({x * TAMAÑO_TILE, y * TAMAÑO_TILE});
                 grillaMapa[y][x] = PISO;
             }

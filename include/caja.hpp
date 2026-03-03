@@ -2,7 +2,6 @@
 #include <SFML/Graphics.hpp>
 #include "../include/entidad.hpp"
 
-// Caja hereda de Entidad 
 class Caja : public Entidad {
 public:
     Caja(sf::Vector2f posInicial, bool estaEnObjetivo);
@@ -11,5 +10,5 @@ public:
     bool isEnObjetivo() const;
 
 private:
-    bool enObjetivo; // true si es meta, false si es normal
+    bool enObjetivo;
 };

@@ -14,14 +14,14 @@ class Mapa {
         int getTile(int x , int y);
         void setTile(int x, int y, int valor);
 
-        grillaNivel getGrilla(){ return grillaMapa; } // Evito sobrecarga
+        grillaNivel getGrilla(){ return grillaMapa; }
 
         void setGrilla(const grillaNivel& nuevaGrilla){ 
             grillaMapa = nuevaGrilla;
             sincronizarCajas();
         } 
 
-        bool nivelCompletado(); //La clase Juego no tiene idea de cómo contar cajas ni cómo saber si ganaste, smplemente le pregunta al mapa: mapa.nivelCompletado()
+        bool nivelCompletado();
         bool cargarTexturas();
         void chequearBotones();
         void cargarNivel(const grillaNivel& nivel, Jugador& jugador);
