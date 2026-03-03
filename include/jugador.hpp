@@ -3,15 +3,12 @@
 #include <SFML/Graphics.hpp>
 #include "../include/entidad.hpp"
 
-class Jugador {
+class Jugador : public Entidad { //al heredar de Entidad, Jugador tiene acceso a sus atributos y métodos, como setPos/getPos
     public:
         Jugador();
         void renderizar(sf::RenderWindow& ventana);
-        void setPos(sf::Vector2f pos);
         bool cargarTextura();
-        sf::Vector2f getPos();
 
     private:
         sf::Texture texturaJugador;
-        sf::Vector2f posicion;
 };

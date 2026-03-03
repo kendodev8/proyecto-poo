@@ -42,7 +42,7 @@ Juego::Juego() :
 
     //CARGAR GRÁFICOS DEL MENÚ
     pantallaActual = Pantalla::MENU; 
-    pantallaAnterior = Pantalla::MENU;
+    pantallaAnterior = Pantalla::MENU; //pr si configuro algo para q vuelva al menu
 
     if (texturaFondoMenu.loadFromFile("./assets/menu_fondo.png")) {
         spriteFondoMenu.setTexture(texturaFondoMenu,true); 
@@ -50,11 +50,11 @@ Juego::Juego() :
         spriteFondoMenu.setScale({384.f / tam.x, 384.f / tam.y});
     }
 
-    if (texturaAjustes.loadFromFile("./assets/icono_ajustes.png")) {
+    /*if (texturaAjustes.loadFromFile("./assets/icono_ajustes.png")) { este lo tendria que borrar porq lo borre al final, pero lo dejo por las dudas
         spriteAjustes.setTexture(texturaAjustes,true);
         spriteAjustes.setPosition({345.f, 5.f}); 
         spriteAjustes.setScale({0.02f, 0.02f}); 
-    }
+    }*/
 
     //UI
     if (texturaUI.loadFromFile("./assets/ui_cuadrado.png")) {
@@ -76,7 +76,7 @@ Juego::Juego() :
     }
 
     //TEXTOS
-    textoJugar.setString("JUGAR");
+    textoJugar.setString("JUGAR"); //hecho a pata noma
     textoJugar.setCharacterSize(30); 
     textoJugar.setFillColor(sf::Color::Yellow);
     textoJugar.setOutlineColor(sf::Color::Black); 
@@ -94,7 +94,7 @@ Juego::Juego() :
     textoSalir.setFillColor(sf::Color::White);
     textoSalir.setOutlineColor(sf::Color::Black);
     textoSalir.setOutlineThickness(4.f);
-    textoSalir.setPosition({105.f, 265.f}); // Centrado en los ladrillos
+    textoSalir.setPosition({105.f, 265.f});
 
     textoOpciones.setString("VOLUMEN");
     textoOpciones.setCharacterSize(26);
@@ -110,14 +110,14 @@ Juego::Juego() :
     textoVolver.setOutlineThickness(4.f);
     textoVolver.setPosition({147.f, 230.f}); 
 
-    textoVolumen.setString("Volumen: 5");
+    textoVolumen.setString("Volumen: 5"); //default a la mitad
     textoVolumen.setCharacterSize(22); 
     textoVolumen.setFillColor(sf::Color::Black); 
     textoVolumen.setOutlineColor(sf::Color::White); 
     textoVolumen.setOutlineThickness(2.f);
     textoVolumen.setPosition({138.f, 150.f}); 
 
-    //barra (Gris)
+    //barra (Gris), pra el vlmen
     barraVolumenFondo.setFillColor(sf::Color(100, 100, 100));
     barraVolumenFondo.setSize({140.f, 10.f});
     barraVolumenFondo.setPosition({122.f, 210.f});
@@ -143,7 +143,7 @@ Juego::Juego() :
     //
 
     nivelActual = 6;
-    mapa.cargarNivel(niveles.getNivel(nivelActual), jugador);
+    mapa.cargarNivel(niveles.getNivel(nivelActual), jugador); //le paso nivel y el jugador para que lo posicione donde corresponde
 }
 
 void Juego::run(){
@@ -169,8 +169,6 @@ void Juego::actualizar(){
                 mapa.cargarNivel(niveles.getNivel(nivelActual), jugador);
                 historial.clear();
             } else {
-            // Si ganan, toca el sonido UNA SOLA VEZ y cambia la pantalla, 
-            // no sabes el quilombo que tenia con esto
                 if(sonidoVictoria) sonidoVictoria->play();
                 pantallaActual = Pantalla::VICTORIA;
             }
@@ -258,7 +256,7 @@ void Juego::manejarInput(){
                     }
                 }
             }
-            //OPCIONES (PAUSA)
+            //OPCIONES ("PAUSA")
             else if (pantallaActual == Pantalla::OPCIONES) {
                 
                 if(teclaPresionada->code == sf::Keyboard::Key::Up || teclaPresionada->code == sf::Keyboard::Key::W){
@@ -274,7 +272,7 @@ void Juego::manejarInput(){
                     }
                 }
 
-                //JUSTAR VOLUMEN
+                //aJUSTAR VOLUMEN
                 if (opcionSeleccionada == 0) {
                     if(teclaPresionada->code == sf::Keyboard::Key::Left || teclaPresionada->code == sf::Keyboard::Key::A){
                         if(nivelVolumen > 0) {
@@ -376,12 +374,12 @@ void Juego::intentarMover(int dx, int dy){
     int xActual = (int)(posActual.x / TAMAÑO_TILE);
     int yActual = (int)(posActual.y / TAMAÑO_TILE);
 
-    int tileDestino = mapa.getTile(xActual + dx, yActual + dy);
+    int tileDestino = mapa.getTile(xActual + dx, yActual + dy); //esto para saber q carajos hay adelante donde quiero moverme
 
     bool empujeValido = false;
 
     if(tileDestino == CAJA || tileDestino == CAJAOBJETIVO){
-        int tileTrasCaja = mapa.getTile(xActual + dx * 2, yActual + dy * 2);
+        int tileTrasCaja = mapa.getTile(xActual + dx * 2, yActual + dy * 2); //aca miro un bloque adelante de la caja para saber si la puedo mover o no
 
         if(tileTrasCaja == PISO || tileTrasCaja == BOTON){
             empujeValido = true;
@@ -396,12 +394,12 @@ void Juego::intentarMover(int dx, int dy){
 
         if(empujeValido){
             //Si muevo un 3 (Caja normal), estaba en el piso -> Dejo un 0 (piso)
-            //Si muevo un 5 (Caja verde), estaba en la meta -> Dejo un 4 (punto rojo)
+            //Si muevo un 5 (Caja verde), estaba en la meta -> Dejo un 4 (boton)
             int tileViejo = (tileDestino == CAJA) ? PISO : BOTON;
             mapa.setTile(xActual + dx, yActual + dy, tileViejo);
 
             //Si va al piso (0) -> Se vuelve caja normal (3)
-            //Si va al boton (4) -> Se vuelve caja verde (5)
+            //Si va al boton (4) -> Se vuelve caja objetivo (5)
             int tileNuevo = (mapa.getTile(xActual + dx * 2, yActual + dy * 2) == PISO) ? CAJA : CAJAOBJETIVO;
             mapa.setTile(xActual + dx * 2, yActual + dy * 2, tileNuevo);
         }

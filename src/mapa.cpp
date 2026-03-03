@@ -6,14 +6,14 @@ Mapa::Mapa(){
     cargarTexturas();
 }
 
-void Mapa::cargarNivel(const grillaNivel& nivel, Jugador& jugador){
+void Mapa::cargarNivel(const grillaNivel& nivel, Jugador& jugador){ //pra que se adapte a cualquier nivel, sin importar la cantidad de cajas o botones
     botonesNecesarios = 0;
     
     for(int y = 0; y < ALTO_MAX; y++){
         for(int x = 0; x < ANCHO_MAX; x++){
             grillaMapa[y][x] = nivel[y][x];
 
-            if(grillaMapa[y][x] == 9){
+            if(grillaMapa[y][x] == 9){ //9 seria el spawn
                 jugador.setPos({x * TAMAÑO_TILE, y * TAMAÑO_TILE});
                 grillaMapa[y][x] = PISO;
             }
@@ -23,13 +23,14 @@ void Mapa::cargarNivel(const grillaNivel& nivel, Jugador& jugador){
             }
         }
     }
+    sincronizarCajas(); 
 }
 
 bool Mapa::cargarTexturas(){
     sf::Texture textura;
 
     if(!textura.loadFromFile("./assets/piso.png")){
-        std::cerr << "Error cargando piso.png" << std::endl;
+        std::cerr << "Error cargando piso.png" << std::endl;  //practicas para q no cargue texturas vacias o crashee
         return false;
     }
     texturas[PISO] = textura;
@@ -80,20 +81,6 @@ void Mapa::renderizar(sf::RenderWindow& ventana){
                     break;
                 }
 
-                case CAJA: {
-                    sf::Sprite spriteCaja(texturas[CAJA]);
-                    spriteCaja.setPosition({posX, posY});
-                    ventana.draw(spriteCaja);
-                    break;
-                }
-
-                case CAJAOBJETIVO: {
-                    sf::Sprite spriteCajaObj(texturas[CAJAOBJETIVO]);
-                    spriteCajaObj.setPosition({posX, posY});
-                    ventana.draw(spriteCajaObj);
-                    break;
-                }
-
                 case BOTON: {
                     sf::Sprite spriteBoton(texturas[BOTON]);
                     spriteBoton.setPosition({posX, posY});
@@ -102,6 +89,9 @@ void Mapa::renderizar(sf::RenderWindow& ventana){
                 }
             }
         }
+    }
+    for (Caja& caja : cajas) {
+        caja.renderizar(ventana, texturas[CAJA], texturas[CAJAOBJETIVO]);
     }
 }
 
@@ -116,6 +106,7 @@ void Mapa::setTile(int x, int y, int valor){
     if(x >= 0 && x < ANCHO_MAX && y >= 0 && y < ALTO_MAX){
         grillaMapa[y][x] = valor;
     }
+    sincronizarCajas(); 
 }
 
 void Mapa::chequearBotones(){
@@ -132,4 +123,17 @@ void Mapa::chequearBotones(){
 
 bool Mapa::nivelCompletado(){
     return botonesPresionados == botonesNecesarios;
+}
+
+void Mapa::sincronizarCajas() {
+    cajas.clear();
+    for(int y = 0; y < ALTO_MAX; y++){
+        for(int x = 0; x < ANCHO_MAX; x++){
+            if(grillaMapa[y][x] == CAJA || grillaMapa[y][x] == CAJAOBJETIVO){
+                bool enObjetivo = (grillaMapa[y][x] == CAJAOBJETIVO);
+                sf::Vector2f pos(x * TAMAÑO_TILE, y * TAMAÑO_TILE);
+                cajas.push_back(Caja(pos, enObjetivo)); 
+            }
+        }
+    }
 }

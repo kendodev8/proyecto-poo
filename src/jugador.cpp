@@ -8,16 +8,13 @@ Jugador::Jugador()
     }
 }
 
-void Jugador::setPos(sf::Vector2f pos){
-    posicion = pos;
-}
-
 void Jugador::renderizar(sf::RenderWindow &ventana){
+
     sf::Sprite spriteJugador(texturaJugador);
-    spriteJugador.setPosition(posicion);
+
+    spriteJugador.setPosition(posInicial);
+
     ventana.draw(spriteJugador);
+
 }
 
-sf::Vector2f Jugador::getPos(){
-    return posicion;
-}
