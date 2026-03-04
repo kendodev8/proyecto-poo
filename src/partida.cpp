@@ -1,33 +1,54 @@
 #include "../include/partida.hpp"
-#include <SFML/Graphics.hpp>
 #include "../include/juego.hpp"
 #include "../include/opciones.hpp"
 #include "../include/victoria.hpp"
+#include <cstring>
 
 Partida::Partida() :
     fuente("./assets/fuente.ttf"),
-    texto(fuente)
+    textoMovimientos(fuente),
+    textoNivel(fuente)
 {
-    nivelActual = 6;
+    textoMovimientos.setString("MOVIMIENTOS: 0");
+    textoMovimientos.setPosition({5.f, 10.f});
+    textoMovimientos.setCharacterSize(20);
+    textoMovimientos.setFillColor(sf::Color::White);
+    textoMovimientos.setOutlineColor(sf::Color::Black);
+    textoMovimientos.setOutlineThickness(1.f);
+
+    textoNivel.setString("NIVEL: 1");
+    textoNivel.setPosition({190.f, 10.f});
+    textoNivel.setCharacterSize(20);
+    textoNivel.setFillColor(sf::Color::White);
+    textoNivel.setOutlineColor(sf::Color::Black);
+    textoNivel.setOutlineThickness(1.f);
+
+    movimientos = 0;
+    nivelActual = 0;
     mapa.cargarNivel(niveles.getNivel(nivelActual), jugador);
 }
 
 void Partida::renderizar(sf::RenderWindow &ventana){
-    ventana.draw(texto);
     mapa.renderizar(ventana);
     jugador.renderizar(ventana);
+    ventana.draw(textoMovimientos);
+    ventana.draw(textoNivel);
 }
 
 void Partida::actualizar(Juego &juego){
     mapa.chequearBotones();
 
-    if(mapa.nivelCompletado()){
-        nivelActual++;
+    textoMovimientos.setString("MOVIMIENTOS: " + std::to_string(movimientos));
+    textoNivel.setString("NIVEL: " + std::to_string(nivelActual + 1));
 
+    if(mapa.nivelCompletado()){
+        juego.setRegistroScores(nivelActual, movimientos, juego.getNombreJugador());
+        nivelActual++;
+        movimientos = 0;
+        
         if(nivelActual < niveles.getCantidad()){
             mapa.cargarNivel(niveles.getNivel(nivelActual), jugador);
         } else {
-            //SI YA NO HAY MÁS NIVELES, GANAs
             juego.cambiarEscena(new Victoria());
         }
     }
@@ -46,12 +67,13 @@ void Partida::procesarEvento(Juego &juego, const sf::Event &evento){
         if(teclaPresionada->code == sf::Keyboard::Key::R){
             mapa.cargarNivel(niveles.getNivel(nivelActual), jugador);
             historial.clear();
+            movimientos = 0;
         }
 
         if(teclaPresionada->code == sf::Keyboard::Key::Z) deshacerMovimiento();
 
         if(teclaPresionada->code == sf::Keyboard::Key::Escape){
-            juego.pausarJuego(new Opciones(false)); //Pausita en vez de cambiar
+            juego.pausarJuego(new Opciones(false));
         }
     }
 }
@@ -75,6 +97,7 @@ void Partida::intentarMover(const int &dx, const int &dy){
 
     if(tileDestino == PISO || tileDestino == BOTON || empujeValido){
         guardarEstado();
+        movimientos++;
 
         //if(sonidoMovimiento){sonidoMovimiento->play();}
 
@@ -108,6 +131,8 @@ void Partida::guardarEstado(){
 
 void Partida::deshacerMovimiento(){
     if(historial.empty()) return;
+
+    movimientos--;
 
     Estado ultimoEstado = historial.back();
 

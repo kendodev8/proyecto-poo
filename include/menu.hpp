@@ -1,8 +1,5 @@
 #ifndef MENU
 #define MENU
-#include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/Audio.hpp>
 #include <optional>
 #include "escena.hpp"
 
@@ -15,7 +12,7 @@ class Menu : public Escena {
 
     private:
         sf::Font fuente;
-        sf::Text textoJugar, textoScoreboard;
+        sf::Text textoJugar, textoScoreboard, textoOpciones;
         sf::Texture texturaFondoMenu;
         sf::Sprite spriteFondoMenu;
 

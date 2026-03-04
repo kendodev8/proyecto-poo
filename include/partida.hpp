@@ -1,7 +1,5 @@
 #ifndef PARTIDA
 #define PARTIDA
-#include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
 #include "escena.hpp"
 #include "mapa.hpp"
 #include "jugador.hpp"
@@ -25,14 +23,14 @@ class Partida : public Escena {
         void guardarEstado();
 
         sf::Font fuente;
-        sf::Text texto;
+        sf::Text textoMovimientos, textoNivel;
 
         Mapa mapa;
         Jugador jugador;
         Niveles niveles;
         std::vector<Estado> historial;
 
-        int nivelActual;
+        int nivelActual, movimientos;
 };
 
 #endif

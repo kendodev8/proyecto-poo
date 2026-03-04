@@ -1,11 +1,11 @@
 #pragma once
-#include <SFML/Graphics.hpp>
 #include "escena.hpp"
 #include "entidad.hpp"
 #include "jugador.hpp"
 #include "mapa.hpp"
 #include "niveles.hpp"
-#include <SFML/Audio.hpp>
+#include "scoremanager.hpp"
+#include <SFML/Window.hpp>
 #include <optional>
 
 /*struct Estado {
@@ -22,6 +22,10 @@ class Juego {
         void run();
         void pausarJuego(Escena* menuPausa);
         void reanudarJuego();
+        std::vector<score> getRegistroScores(){ return scoreManager.getScores(); }
+        void setRegistroScores(const int &nivel, const int &movimientos, const std::string &nombre){ scoreManager.setScore(nivel, movimientos, nombre); }
+        std::string getNombreJugador(){ return nombreJugador; }
+        void setNombreJugador(std::string nombre) { nombreJugador = nombre; }
         ~Juego();
 
     private:
@@ -38,56 +42,24 @@ class Juego {
         sf::SoundBuffer bufferMovimiento;
         std::optional<sf::Sound> sonidoMovimiento;*/
 
-        //Pantalla pantallaActual;
-        //Pantalla pantallaAnterior;
-
-        // --- COSAS VISUALES DEL MENÚ Y OPCIONES ---
-        sf::Texture texturaFondoMenu;
-        sf::Texture texturaUI;
-        sf::Texture texturaAjustes; //Creo q este no lo usamos ya, era pq habia una tuerca en la esquina para volver al menú
-        sf::Text textoVictoria;
-        sf::Texture texturaFondoVictoria;
-
-        // Menú Principal
-        sf::Sprite spriteFondoMenu;
-        sf::Sprite botonJugar;
-        sf::Text textoJugar;
-        sf::Sprite botonOpciones;
-        sf::Text textoOpciones;
-        sf::RectangleShape fondoVictoria;
-
-        // Pantalla de Opciones
-        sf::Text textoSalir, textoVolver, textoVolumen;
-        sf::Text textoNivelUI;
-        sf::Sprite botonVolver;
-        sf::RectangleShape barraVolumenFondo;
-        sf::Sprite perillaVolumen;
-        int opcionSeleccionada;     // 0 o 1 (para saber qué botón brilla)
-        int nivelVolumen;           // Del 0 al 10
-
         // In-Game
-        //sf::Sprite spriteAjustes;
 
         void manejarInput();
-        void actualizar();
-        void renderizar();
         void intentarMover(int dx, int dy);
         void guardarEstado();
         void deshacerMovimiento();
 
         sf::RenderWindow ventana;
 
+        std::string nombreJugador;
+
         Jugador jugador;
         Mapa mapa;
         Niveles niveles;
-        //std::vector<Estado> historial;
-
-        int nivelActual;
-
-        sf::Font fuente;
+        ScoreManager scoreManager;
 
         Escena *escena, *siguiente = nullptr;
+        Escena *escenaPausada = nullptr;
 
-        Escena* escenaPausada = nullptr;
         bool pausando = false;
 };
