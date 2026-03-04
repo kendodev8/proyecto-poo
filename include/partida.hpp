@@ -4,6 +4,7 @@
 #include "mapa.hpp"
 #include "jugador.hpp"
 #include "niveles.hpp"
+#include <SFML/Audio.hpp>
 
 struct Estado {
     grillaNivel copiaGrilla;
@@ -24,6 +25,11 @@ class Partida : public Escena {
 
         sf::Font fuente;
         sf::Text textoMovimientos, textoNivel;
+        
+        sf::SoundBuffer bufferPaso;
+        sf::Sound sonidoPaso;
+        sf::SoundBuffer bufferNivel;
+        sf::Sound sonidoNivel;
 
         Mapa mapa;
         Jugador jugador;

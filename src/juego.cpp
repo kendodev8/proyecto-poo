@@ -9,14 +9,14 @@ Juego::Juego(Escena *primerEscena) :
     /*CARGAR AUDIO
     if(bufferSelect.loadFromFile("./assets/select.mp3")){
         sonidoSelect.emplace(bufferSelect);
-    }
+    }*/
 
-    if(musicaFondo.openFromFile("./assets/musica1.mp3")){
+    if (musicaFondo.openFromFile("./assets/musica1.mp3")) {
         musicaFondo.setLooping(true);
-        musicaFondo.setVolume(50.f); 
+        musicaFondo.setVolume(30.f); 
         musicaFondo.play();
     }
-    if(bufferMovimiento.loadFromFile("./assets/movimiento.mp3")){
+    /*if(bufferMovimiento.loadFromFile("./assets/movimiento.mp3")){
         sonidoMovimiento.emplace(bufferMovimiento);
         sonidoMovimiento->setVolume(100.f);
     }
