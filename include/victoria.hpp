@@ -1,6 +1,5 @@
 #ifndef VICTORIA
 #define VICTORIA
-#include <SFML/Graphics.hpp>
 #include "escena.hpp"
 
 class Victoria : public Escena {
@@ -17,4 +16,5 @@ private:
     sf::Text textoVictoria;
     sf::Text textoSalir;
 };
+
 #endif 

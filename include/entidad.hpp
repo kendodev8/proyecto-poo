@@ -1,24 +1,20 @@
 #pragma once
-
-#include <SFML/Graphics.hpp>
+#include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
 #include <cstdio>
 
 class Entidad {
     public:
-        virtual ~Entidad() = default;
-
         void setPos(sf::Vector2f pos){
-            // Debug
-            printf("Pos X: %f\n", pos.x); 
-            printf("Pos Y: %f\n", pos.y);
             posInicial = pos;
-            printf("Pos X: %f\n", posInicial.x);
-            printf("Pos Y: %f\n", posInicial.y);
         }
 
         sf::Vector2f getPos(){
             return posInicial;
         }
+
+        virtual ~Entidad() = default;
 
     protected:
         sf::Vector2f posInicial;

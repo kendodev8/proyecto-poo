@@ -1,5 +1,5 @@
 #pragma once
-#include "../include/datanivel.hpp"
+#include "datanivel.hpp"
 #include <vector>
 
 class Niveles {

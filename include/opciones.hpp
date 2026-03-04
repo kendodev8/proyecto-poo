@@ -1,7 +1,5 @@
 #ifndef OPCIONES
 #define OPCIONES
-#include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
 #include "escena.hpp"
 
 class Opciones : public Escena {

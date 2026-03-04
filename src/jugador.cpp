@@ -9,12 +9,9 @@ Jugador::Jugador()
 }
 
 void Jugador::renderizar(sf::RenderWindow &ventana){
-
     sf::Sprite spriteJugador(texturaJugador);
 
     spriteJugador.setPosition(posInicial);
 
     ventana.draw(spriteJugador);
-
 }
-

@@ -1,7 +1,5 @@
 #pragma once
-
-#include <SFML/Graphics.hpp>
-#include "../include/entidad.hpp"
+#include "entidad.hpp"
 
 class Jugador : public Entidad {
     public:

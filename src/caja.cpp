@@ -5,7 +5,7 @@ Caja::Caja(sf::Vector2f posInicial, bool estaEnObjetivo) {
     this->enObjetivo = estaEnObjetivo;
 }
 
-void Caja::renderizar(sf::RenderWindow& ventana, sf::Texture& texturaNormal, sf::Texture& texturaObjetivo) {
+void Caja::renderizar(sf::RenderWindow &ventana, sf::Texture &texturaNormal, sf::Texture &texturaObjetivo) {
     sf::Texture& texturaAUsar = enObjetivo ? texturaObjetivo : texturaNormal;
     sf::Sprite spriteCaja(texturaAUsar);
     
@@ -17,6 +17,6 @@ void Caja::setEnObjetivo(bool estado) {
     enObjetivo = estado;
 }
 
-bool Caja::isEnObjetivo() const {
+bool Caja::getEnObjetivo() const {
     return enObjetivo;
 }

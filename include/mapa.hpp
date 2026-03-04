@@ -1,11 +1,9 @@
 #pragma once
-
-#include <SFML/Graphics.hpp>
 #include <map>
 #include <vector>
-#include "../include/datanivel.hpp"
-#include "../include/jugador.hpp"
-#include "../include/caja.hpp"
+#include "datanivel.hpp"
+#include "jugador.hpp"
+#include "caja.hpp"
 
 class Mapa {
     public:
