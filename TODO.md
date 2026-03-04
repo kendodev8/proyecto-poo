@@ -62,24 +62,24 @@ Lista de tareas planificadas para el desarrollo del proyecto.
 
 ## 🧼 Extras
 
-- [ ] Menú simple
+- [x] Menú simple
 - [x] Reiniciar nivel
-- [ ] Contador de movimientos
-- [ ] Pantalla de victoria
+- [x] Contador de movimientos
+- [x] Pantalla de victoria
 
 ---
 
 ## 🧪 Testing y Debug
 
-- [ ] Debug con `std::cout`
-- [ ] Revisión de colisiones
-- [ ] Pruebas de todos los niveles
+- [x] Debug con `printf`
+- [x] Revisión de colisiones
+- [x] Pruebas de todos los niveles
 
 ---
 
 ## 📦 Entrega
 
 - [ ] Revisión final del código
-- [ ] Limpieza de warnings
-- [ ] Verificar compilación en otra máquina
-- [ ] Preparar explicación para defensa
+- [x] Limpieza de warnings
+- [x] Verificar compilación en otra máquina
+- [x] Preparar explicación para defensa
