@@ -25,6 +25,11 @@ Victoria::Victoria() :
     textoSalir.setOutlineColor(sf::Color::Black);
     textoSalir.setOutlineThickness(4.f);
     textoSalir.setPosition({105.f, 250.f});
+
+    if (musicaVictoria.openFromFile("./assets/victoria.mp3")) {
+    musicaVictoria.setVolume(50.f);
+    musicaVictoria.play();
+}
 }
 void Victoria::actualizar(Juego &juego) {}
 

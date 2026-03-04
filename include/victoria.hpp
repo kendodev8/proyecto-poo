@@ -1,6 +1,7 @@
 #ifndef VICTORIA
 #define VICTORIA
 #include "escena.hpp"
+#include <SFML/Audio.hpp>
 
 class Victoria : public Escena {
 public:
@@ -15,6 +16,7 @@ private:
     sf::Font fuente;
     sf::Text textoVictoria;
     sf::Text textoSalir;
+    sf::Music musicaVictoria;
 };
 
 #endif 

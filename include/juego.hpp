@@ -7,6 +7,7 @@
 #include "scoremanager.hpp"
 #include <SFML/Window.hpp>
 #include <optional>
+#include <SFML/Audio.hpp>
 
 /*struct Estado {
     grillaNivel copiaGrilla;
@@ -29,6 +30,7 @@ class Juego {
         ~Juego();
 
     private:
+        sf::Music musicaFondo;
         /*sf::SoundBuffer bufferSelect;
         std::optional<sf::Sound> sonidoSelect;
 

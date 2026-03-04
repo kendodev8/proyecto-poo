@@ -7,7 +7,9 @@
 Partida::Partida() :
     fuente("./assets/fuente.ttf"),
     textoMovimientos(fuente),
-    textoNivel(fuente)
+    textoNivel(fuente),
+    sonidoPaso(bufferPaso),
+    sonidoNivel(bufferNivel)
 {
     textoMovimientos.setString("MOVIMIENTOS: 0");
     textoMovimientos.setPosition({5.f, 10.f});
@@ -26,6 +28,19 @@ Partida::Partida() :
     movimientos = 0;
     nivelActual = 0;
     mapa.cargarNivel(niveles.getNivel(nivelActual), jugador);
+
+    movimientos = 0;
+    nivelActual = 0;
+    mapa.cargarNivel(niveles.getNivel(nivelActual), jugador);
+
+    if (bufferPaso.loadFromFile("./assets/movimiento.mp3")) {
+        sonidoPaso.setBuffer(bufferPaso);
+        sonidoPaso.setVolume(50.f);
+    }
+    if (bufferNivel.loadFromFile("./assets/siguiente.mp3")) {
+        sonidoNivel.setBuffer(bufferNivel);
+        sonidoNivel.setVolume(60.f);
+    }
 }
 
 void Partida::renderizar(sf::RenderWindow &ventana){
@@ -47,7 +62,9 @@ void Partida::actualizar(Juego &juego){
         movimientos = 0;
         
         if(nivelActual < niveles.getCantidad()){
+            sonidoNivel.play();
             mapa.cargarNivel(niveles.getNivel(nivelActual), jugador);
+            historial.clear();
         } else {
             juego.cambiarEscena(new Victoria());
         }
@@ -100,6 +117,7 @@ void Partida::intentarMover(const int &dx, const int &dy){
         movimientos++;
 
         //if(sonidoMovimiento){sonidoMovimiento->play();}
+        sonidoPaso.play();
 
         if(empujeValido){
             //Si muevo un 3 (Caja normal), estaba en el piso -> Dejo un 0 (piso)
